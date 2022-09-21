@@ -2,12 +2,80 @@
 
 namespace Figures;
 
-public static class Area
+public interface IFigure
+{
+    // Каждая фигура должна реализовывать интерфейс IFigure, чтобы по-своему определять свойство для получения площади
+    public double Area { get; }
+}
+
+public class Circle : IFigure
+{
+    private double radius;
+    public double Radius
+    {
+        get => radius;
+        set
+        {
+            if (double.IsNegative(value) || double.IsNaN(value))
+                throw new ArgumentException("Радиус не может быть отрицательным или равным NaN", nameof(value));
+            radius = value;
+        }
+    }
+    public double Area
+    {
+        get
+        {
+            // Не используем Math.Pow, чтобы работало чуть быстрее
+            // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
+            // Можно хранить значение площади в отдельном поле и пересчитывать только тогда, когда меняется радиус
+            return Radius * Radius * Math.PI;
+        }
+    }
+
+    public Circle(double radius) => Radius = radius;
+}
+
+public class Triangle : IFigure
+{
+    // Пусть стороны будут неизменяемы, чтобы не проверять нарушение правила: сумма длин двух сторон больше третьей
+    public double SideA { get; }
+    public double SideB { get; }
+    public double SideC { get; }
+
+    public double Area { get; }
+    public bool IsRightTriangle { get; } = false;
+
+    public Triangle(double a, double b, double c)
+    {
+        if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
+            throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+
+        // Используем Epsilon, чтобы точно убедиться, что агрументы правильные
+        if (a + b - c < double.Epsilon || a + c - b < double.Epsilon || b + c - a < double.Epsilon)
+            throw new ArgumentException("Сумма длин двух сторон должна быть больше длины третьей стороны", nameof(a));
+
+        SideA = a;
+        SideB = b;
+        SideC = c;
+
+        // Сразу вычислим площадь и сохраним в свойство. Т.к. стороны неизменяемы, можно не пересчитывать
+        // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
+        double s = (a + b + c) / 2;
+        Area = Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+
+        // И сразу определим, прямоугольный ли треугольник
+        if (a * a == b * b + c * c || b * b == a * a + c * c || c * c == a * a + b * b) IsRightTriangle = true;
+    }
+}
+
+
+// Класс Calc, как набор статических методов для тех, кто не хочет создавать экземпляры фигур
+public static class Calc
 {
     public static double GetAreaCircleByRadius(double radius)
     {
         // Если значение отрицательное или не является числом, предполагаем, что аргумент неправильный
-        if (double.IsNegative(radius) || double.IsNaN(radius)) 
+        if (double.IsNegative(radius) || double.IsNaN(radius))
             throw new ArgumentException("Значение аргумента отрицательное или NaN", nameof(radius));
 
         // Не используем Math.Pow, чтобы работало чуть быстрее
@@ -35,5 +103,20 @@ public static class Area
         if (double.IsInfinity(result) || double.IsNaN(result))
             throw new ArgumentException("Аргументы привели к бесконечности или NaN", nameof(a));
         return result;
+    }
+
+    public static bool IsRightTriangle(double a, double b, double c)
+    {
+        if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
+            throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+
+        // Используем Epsilon, чтобы точно убедиться, что агрументы правильные
+        if (a + b - c < double.Epsilon || a + c - b < double.Epsilon || b + c - a < double.Epsilon)
+            throw new ArgumentException("Сумма длин двух сторон должна быть больше длины третьей стороны", nameof(a));
+
+        if (Math.Abs(a * a - (b * b + c * c)) <= double.Epsilon ||
+            Math.Abs(b * b - (a * a + c * c)) <= double.Epsilon ||
+            Math.Abs(c * c - (a * a + b * b)) <= double.Epsilon) return true;
+        return false;
     }
 }
