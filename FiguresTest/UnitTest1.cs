@@ -21,17 +21,64 @@ public class Tests
             Assert.That(new Circle(23).Area, Is.EqualTo(1661.9025137490005));
             Assert.That(new Circle(1.27).Area, Is.EqualTo(5.067074790974977));
             Assert.That(new Circle(972872782742778678578D).Area, Is.EqualTo(2.973459174482516e+42));
+            Assert.That(new Circle(double.MaxValue).Area, Is.EqualTo(double.PositiveInfinity));
+
+            var circle = new Circle(23) { Radius = 12 }; // Заменяем радиус и проверяем
+            Assert.That(circle.Area, Is.EqualTo(452.3893421169302));
 
             Assert.That(new Triangle(2, 4.21, 3.47).Area, Is.EqualTo(3.4443907095450124d));
             Assert.That(new Triangle(548543, 645557, 753424).Area, Is.EqualTo(173041408016.02628d));
             Assert.That(new Triangle(9, 3, 11.9999999999).Area, Is.EqualTo(0.00012727809540592021d));
             Assert.That(new Triangle(0.00000001, 0.00000001, 0.00000001).Area, Is.EqualTo(4.3301270189221959E-17d));
+            Assert.That(new Triangle(double.MaxValue, double.MaxValue, double.MaxValue).Area,
+                Is.EqualTo(double.PositiveInfinity));
 
             Assert.That(new Triangle(3, 4, 5).IsRightTriangle, Is.True);
             Assert.That(new Triangle(3, 4, 5.000000000001).IsRightTriangle, Is.False);
             Assert.That(new Triangle(3, 4, 4.999999999999).IsRightTriangle, Is.False);
         });
     }
+
+    [Test]
+    public void TestClassesWithNotNormalArgs()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.Throws<ArgumentException>(() => new Circle(-1));
+            Assert.Throws<ArgumentException>(() => new Circle(double.NaN));
+
+            Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12));
+            Assert.Throws<ArgumentException>(() => new Triangle(0, 12, 3));
+            Assert.Throws<ArgumentException>(() => new Triangle(-24, 2, 5));
+            Assert.Throws<ArgumentException>(() => new Triangle(double.NaN, 2, 0.2));
+        });
+    }
+
+    [Test]
+    public void TestInterface()
+    {
+        IFigure figure;
+        Random random = new();
+        double ExpectedResult;
+
+        // На этапе компиляции мы не знаем, какой тип фигуры будет в переменной figure
+        if (random.Next(0, 2) == 1)
+        {
+            figure = new Circle(23);
+            ExpectedResult = 1661.9025137490005;
+        }
+        else
+        {
+            figure = new Triangle(3, 4, 5);
+            ExpectedResult = 6;
+        }
+
+        // Но за счёт приведения фигуры к интерфейсу вычисляем площадь
+        Assert.That(figure.Area, Is.EqualTo(ExpectedResult));
+    }
+
+
+    // Тестируем статические методы в классе Calc
 
     [TestCase(0, ExpectedResult = 0)]
     [TestCase(double.Epsilon, ExpectedResult = 0)]
@@ -73,7 +120,7 @@ public class Tests
     public bool TestIsRightTriangle(double a, double b, double c) => IsRightTriangle(a, b, c);
 
     [Test]
-    public void TestTestIsRightTriangleNotNormalArgument()
+    public void TestIsRightTriangleNotNormalArgument()
     {
         Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(97, 12, 20));
         Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(9, 3, 12));
