@@ -1,0 +1,12 @@
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.deps.json
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.dll
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.pdb
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.csproj.AssemblyReference.cache
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.GeneratedMSBuildEditorConfig.editorconfig
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.AssemblyInfoInputs.cache
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.AssemblyInfo.cs
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.csproj.CoreCompileInputs.cache
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.dll
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\refint\Figures.dll
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\Figures.pdb
+C:\All\ATS\Visual Studio\Проекты из тренингов и курсов\Figures\obj\Debug\net6.0\ref\Figures.dll

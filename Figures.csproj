@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FiguresTest\**" />
+    <EmbeddedResource Remove="FiguresTest\**" />
+    <None Remove="FiguresTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.3" />
   </ItemGroup>
 
