@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\Figures.csproj": {}
+    "C:\\Tools\\repos\\Figures\\Figures.csproj": {}
   },
   "projects": {
-    "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\Figures.csproj": {
+    "C:\\Tools\\repos\\Figures\\Figures.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\Figures.csproj",
+        "projectUniqueName": "C:\\Tools\\repos\\Figures\\Figures.csproj",
         "projectName": "Figures",
-        "projectPath": "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\Figures.csproj",
+        "projectPath": "C:\\Tools\\repos\\Figures\\Figures.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\obj\\",
+        "outputPath": "C:\\Tools\\repos\\Figures\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -61,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

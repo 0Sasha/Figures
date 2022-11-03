@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lEYmoT0Sy6cSCHrltEvZPzLZly1mlMZNJ2xvwhNAQ7n/q2KJG7JrcqokpokXpx5lwPDSzT0Ndou5srtLW3ZKiw==",
+  "dgSpecHash": "E9eYR68aJfowHDi5J8q1qIefOO1ZHOt8NjuMCyz4YZo1kUjHK8+BBkNSv3vhsqrMeWZLyu5K14ByR3eAJax7qg==",
   "success": true,
-  "projectFilePath": "C:\\All\\ATS\\Visual Studio\\Проекты из тренингов и курсов\\Figures\\Figures.csproj",
+  "projectFilePath": "C:\\Tools\\repos\\Figures\\Figures.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
