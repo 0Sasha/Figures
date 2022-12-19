@@ -229,11 +229,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Tools\\repos\\Figures\\Figures.csproj",
+      "projectUniqueName": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\Figures.csproj",
       "projectName": "Figures",
-      "projectPath": "C:\\Tools\\repos\\Figures\\Figures.csproj",
+      "projectPath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\Figures.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "C:\\Tools\\repos\\Figures\\obj\\",
+      "outputPath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -283,7 +283,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

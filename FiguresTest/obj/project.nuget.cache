@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lq/Or59PFi5QUxS2fK25uiX5VvNbJL9DriWHqS0TB/mo8PJqTOWqnVpLDyY9V3c+JGNnah2sYiClBg1dT80Irw==",
+  "dgSpecHash": "i7/tcVjV0zbFAD82vXVXN7dZwq9TuQ7FldSb2WD8wwrgkRrUPspaJa7OiiGtMFpW5OEW4IXxgAArzXpXOQvQLQ==",
   "success": true,
-  "projectFilePath": "C:\\Tools\\repos\\Figures\\FiguresTest\\FiguresTest.csproj",
+  "projectFilePath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\FiguresTest\\FiguresTest.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.codecoverage\\17.1.0\\microsoft.codecoverage.17.1.0.nupkg.sha512",

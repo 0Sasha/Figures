@@ -3992,11 +3992,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Tools\\repos\\Figures\\FiguresTest\\FiguresTest.csproj",
+      "projectUniqueName": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\FiguresTest\\FiguresTest.csproj",
       "projectName": "FiguresTest",
-      "projectPath": "C:\\Tools\\repos\\Figures\\FiguresTest\\FiguresTest.csproj",
+      "projectPath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\FiguresTest\\FiguresTest.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "C:\\Tools\\repos\\Figures\\FiguresTest\\obj\\",
+      "outputPath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\FiguresTest\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4013,8 +4013,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Tools\\repos\\Figures\\Figures.csproj": {
-              "projectPath": "C:\\Tools\\repos\\Figures\\Figures.csproj"
+            "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\Figures.csproj": {
+              "projectPath": "C:\\All\\Visual Studio Projects\\Проекты из тренингов и курсов\\Figures\\Figures.csproj"
             }
           }
         }
@@ -4066,7 +4066,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

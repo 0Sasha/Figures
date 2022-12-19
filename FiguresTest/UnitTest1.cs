@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using static Figures.Calc;
 
 namespace Figures.Test;
@@ -12,7 +13,7 @@ public class Tests
     }
 
 
-    [Test]
+    [Test] // Тестируем круг и треугольник
     public void TestClasses()
     {
         Assert.Multiple(() =>
@@ -23,35 +24,129 @@ public class Tests
             Assert.That(new Circle(972872782742778678578D).Area, Is.EqualTo(2.973459174482516e+42));
             Assert.That(new Circle(double.MaxValue).Area, Is.EqualTo(double.PositiveInfinity));
 
-            var circle = new Circle(23) { Radius = 12 }; // Заменяем радиус и проверяем
-            Assert.That(circle.Area, Is.EqualTo(452.3893421169302));
+            Assert.Throws<ArgumentException>(() => new Circle(-1));
+            Assert.Throws<ArgumentException>(() => new Circle(double.NaN));
 
             Assert.That(new Triangle(2, 4.21, 3.47).Area, Is.EqualTo(3.4443907095450124d));
             Assert.That(new Triangle(548543, 645557, 753424).Area, Is.EqualTo(173041408016.02628d));
             Assert.That(new Triangle(9, 3, 11.9999999999).Area, Is.EqualTo(0.00012727809540592021d));
             Assert.That(new Triangle(0.00000001, 0.00000001, 0.00000001).Area, Is.EqualTo(4.3301270189221959E-17d));
-            Assert.That(new Triangle(double.MaxValue, double.MaxValue, double.MaxValue).Area,
-                Is.EqualTo(double.PositiveInfinity));
+            Assert.That(new Triangle(double.MaxValue, double.MaxValue, double.MaxValue).Area, Is.EqualTo(double.PositiveInfinity));
 
             Assert.That(new Triangle(3, 4, 5).IsRightTriangle, Is.True);
             Assert.That(new Triangle(3, 4, 5.000000000001).IsRightTriangle, Is.False);
             Assert.That(new Triangle(3, 4, 4.999999999999).IsRightTriangle, Is.False);
-        });
-    }
-
-    [Test]
-    public void TestClassesWithNotNormalArgs()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.Throws<ArgumentException>(() => new Circle(-1));
-            Assert.Throws<ArgumentException>(() => new Circle(double.NaN));
 
             Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12));
             Assert.Throws<ArgumentException>(() => new Triangle(0, 12, 3));
             Assert.Throws<ArgumentException>(() => new Triangle(-24, 2, 5));
             Assert.Throws<ArgumentException>(() => new Triangle(double.NaN, 2, 0.2));
         });
+    }
+
+
+    [Test] // Тестируем правильный многоугольник с любым количеством сторон >= 3 и любой длиной сторон >= 0
+    public void TestEquilateralPolygon()
+    {
+        EquilateralPolygon polygon = new(3, 0); // Три стороны с нулевой длиной
+        Assert.That(polygon.Area, Is.EqualTo(0));
+
+        polygon.LengthOfSide = 0.1;
+        Assert.That(polygon.Area, Is.EqualTo(0.0043301270189221959d));
+
+        polygon.LengthOfSide = 3;
+        Assert.That(polygon.Area, Is.EqualTo(3.8971143170299753d));
+
+        Assert.That(Math.Round(polygon.Area, 12),                    // Сравниваем разные формулы из двух классов
+            Is.EqualTo(Math.Round(new Triangle(3, 3, 3).Area, 12))); // Немного не хватает точности, приходится округлять
+
+        polygon.NumberOfSides = 5;
+        Assert.That(polygon.Area, Is.EqualTo(15.484296605300704d));
+
+        polygon = new EquilateralPolygon(4, 2);
+        Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4)); // Немного не хватает точности, округляем
+        // Возможно, стоит сразу немного округлять в методах свойств всех классов
+
+        polygon.NumberOfSides = int.MaxValue;
+        Assert.That(polygon.Area, Is.EqualTo(double.PositiveInfinity));
+
+
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(2, 2)); // 2 стороны
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(-1, 2)); // -1 сторона
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(4, -3)); // Отрицательная длина
+    }
+
+
+    [Test] // Тестируем произвольную фигуру на основе любого количества координат >= 1
+    public void TestArbitraryFigure()
+    {
+        var figure = new ArbitraryFigure(new Point(3, 4)); // Просто точка
+        Assert.That(figure.Area, Is.EqualTo(0));
+
+        figure = new ArbitraryFigure(new Point(3, 4), new Point(3, 8)); // Отрезок
+        Assert.That(figure.Area, Is.EqualTo(0));
+
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)); // Прямоугольный треугольник
+        Assert.That(figure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // Квадрат
+        Assert.That(figure.Area, Is.EqualTo(4));
+
+        figure = new ArbitraryFigure(new Point(3, 4), new Point(5, 11), new Point(12, 8), new Point(9, 5), new Point(5, 6));
+        Assert.That(figure.Area, Is.EqualTo(30));
+
+
+        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(null));
+        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(new Point[] { }));
+    }
+
+
+    [Test]
+    public void TestUniversalFigure()
+    {
+        Func<double[], double> myFunc = new((arrSides) =>
+        {
+            if (arrSides.Length != 3)
+                throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
+
+            double a = arrSides[0];
+            double b = arrSides[1];
+            double c = arrSides[2];
+
+            double s = (a + b + c) / 2;
+            return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+        });
+        var universalFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
+        Assert.That(universalFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+
+        Func<double[], double> myFunc2 = new((elements) =>
+        {
+            if (elements.Length != 3)
+                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+
+            double side1 = elements[0];
+            double side2 = elements[1];
+            double angleBetween = elements[2];
+
+            return side1 * side2 / 2 * Math.Sin(angleBetween / 180 * Math.PI);
+        });
+        universalFigure = new UniversalFigure<double>(myFunc2, 3, 4, 90);
+        Assert.That(universalFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+
+    }
+
+    [Test]
+    public void TestSpeed()
+    {
+        IFigure[] figures = new IFigure[2000];
+        for (int i = 0; i < 500; i++) figures[i] = new Triangle(3, 4, 5);
+        for (int i = 500; i < 1000; i++) figures[i] = new Circle(3);
+        for (int i = 1000; i < 1500; i++) figures[i] = new EquilateralPolygon(5, 3);
+        for (int i = 1500; i < 2000; i++) figures[i] = new ArbitraryFigure(
+            new Point[] { new Point(1, 1), new Point(3, 2), new Point(4, 6), new Point(3, 7) });
+
+        double sumAreas = 0;
+        foreach (var figure in figures) sumAreas += figure.Area;
     }
 
     [Test]
