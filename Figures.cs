@@ -146,6 +146,10 @@ public class UniversalFigure<T> : IFigure
 
         CalcArea = funcForCalcArea ?? throw new ArgumentException(null, nameof(funcForCalcArea));
         Elements = elements;
+
+        // Сразу проверяем работоспособность внешней функции с заданными элементами
+        // Работоспособность функции и выдача исключений - ответственность внешнего клиента
+        CalcArea(Elements);
     }
 }
 

@@ -163,7 +163,11 @@ public class Tests
         Assert.That(myPointFigure.Area, Is.EqualTo(16));
 
 
+        // Тестируем ошибку в передаче аргументов. Передаём 1 координату вместо 2.
+        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, new Point(-4, 0)));
 
+        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
+        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }
 
     [Test]
