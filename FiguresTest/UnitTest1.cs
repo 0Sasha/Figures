@@ -122,6 +122,13 @@ public class Tests
         var myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
         Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
+        // Сторона треугольника больше суммы двух остальных сторон - получаем double.NaN или делаем проверку внутри функции
+        myFigure.Elements[0] = 74;
+        Assert.That(myFigure.Area, Is.EqualTo(double.NaN));
+
+        // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
+        Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
+
 
         // Задаём треугольник двумя сторонами и углом между ними
         myFunc = new((elements) =>
@@ -138,7 +145,8 @@ public class Tests
         myFigure = new UniversalFigure<double>(myFunc, 3, 4, 90);
         Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        // В этом сценарии легко ошибиться с порядком аргументов, и передать сначала угол, а затем стороны
+        // В этом сценарии легко ошибиться с порядком аргументов -
+        // передать сначала угол, а затем стороны, и даже не узнать об этом
         // Поэтому клиенту нужно с осторожностью использовать такой абстрактный класс
         myFigure = new UniversalFigure<double>(myFunc, 90, 3, 4);
         Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area));
