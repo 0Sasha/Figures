@@ -1,15 +1,3 @@
-C:\Tools\repos\Figures\bin\Debug\net6.0\Figures.deps.json
-C:\Tools\repos\Figures\bin\Debug\net6.0\Figures.dll
-C:\Tools\repos\Figures\bin\Debug\net6.0\Figures.pdb
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.csproj.AssemblyReference.cache
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.GeneratedMSBuildEditorConfig.editorconfig
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.AssemblyInfoInputs.cache
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.AssemblyInfo.cs
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.csproj.CoreCompileInputs.cache
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.dll
-C:\Tools\repos\Figures\obj\Debug\net6.0\refint\Figures.dll
-C:\Tools\repos\Figures\obj\Debug\net6.0\Figures.pdb
-C:\Tools\repos\Figures\obj\Debug\net6.0\ref\Figures.dll
 C:\All\Visual Studio Projects\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.deps.json
 C:\All\Visual Studio Projects\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.dll
 C:\All\Visual Studio Projects\Проекты из тренингов и курсов\Figures\bin\Debug\net6.0\Figures.pdb
