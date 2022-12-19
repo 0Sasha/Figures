@@ -101,9 +101,10 @@ public class Tests
     }
 
 
-    [Test]
+    [Test] // Тестируем универсальную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
     public void TestUniversalFigure()
     {
+        // Задаём функцию для вычисления площади треугольника по трём сторонам
         Func<double[], double> myFunc = new((arrSides) =>
         {
             if (arrSides.Length != 3)
@@ -116,10 +117,14 @@ public class Tests
             double s = (a + b + c) / 2;
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
-        var universalFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
-        Assert.That(universalFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        Func<double[], double> myFunc2 = new((elements) =>
+        // Задаём треугольник тремя сторонами и функцией
+        var myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
+        Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+
+
+        // Задаём треугольник двумя сторонами и углом между ними
+        myFunc = new((elements) =>
         {
             if (elements.Length != 3)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
@@ -130,8 +135,34 @@ public class Tests
 
             return side1 * side2 / 2 * Math.Sin(angleBetween / 180 * Math.PI);
         });
-        universalFigure = new UniversalFigure<double>(myFunc2, 3, 4, 90);
-        Assert.That(universalFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+        myFigure = new UniversalFigure<double>(myFunc, 3, 4, 90);
+        Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+
+
+        // Задаём круг по длине окружности
+        myFunc = new((elements) =>
+        {
+            if (elements.Length != 1)
+                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+
+            return elements[0] * elements[0] / (4 * Math.PI);
+        });
+        myFigure = new UniversalFigure<double>(myFunc, 2 * Math.PI);
+        Assert.That(myFigure.Area, Is.EqualTo(new Circle(1).Area));
+
+
+        // Задаём квадрат по 2 координатам. Используем Point[]
+        Func<Point[], double> myPointFunc = new((elements) =>
+        {
+            if (elements.Length != 2)
+                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+
+            return Math.Abs((elements[0].X - elements[1].X) * (elements[0].Y - elements[1].Y));
+        });
+        var myPointFigure = new UniversalFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
+        Assert.That(myPointFigure.Area, Is.EqualTo(16));
+
+
 
     }
 
