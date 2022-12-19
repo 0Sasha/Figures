@@ -138,6 +138,11 @@ public class Tests
         myFigure = new UniversalFigure<double>(myFunc, 3, 4, 90);
         Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
+        // В этом сценарии легко ошибиться с порядком аргументов, и передать сначала угол, а затем стороны
+        // Поэтому клиенту нужно с осторожностью использовать такой абстрактный класс
+        myFigure = new UniversalFigure<double>(myFunc, 90, 3, 4);
+        Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area));
+
 
         // Задаём круг по длине окружности
         myFunc = new((elements) =>
@@ -151,7 +156,7 @@ public class Tests
         Assert.That(myFigure.Area, Is.EqualTo(new Circle(1).Area));
 
 
-        // Задаём квадрат по 2 координатам. Используем Point[]
+        // Задаём квадрат по 2 координатам. Теперь используем Point[]
         Func<Point[], double> myPointFunc = new((elements) =>
         {
             if (elements.Length != 2)
