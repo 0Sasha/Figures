@@ -139,7 +139,11 @@ public class ArbitraryFigure : IFigure
         }
     }
 
-    public ArbitraryFigure(params Point[] vertices) => Vertices = vertices;
+    public ArbitraryFigure(params Point[] vertices)
+    {
+        if (vertices == null || vertices.Length == 0) throw new ArgumentException(null, nameof(vertices));
+        this.vertices = vertices;
+    }
 }
 
 
@@ -149,7 +153,7 @@ public class ArbitraryFigure : IFigure
 
 // Этот класс самый ненадёжный, т.к. легко ошибиться и передать в elements аргументы
 // в неправильном порядке (если для функции важен порядок). Разные уязвимые сценарии рассмотренны в TestUniversalFigure
-// Внешнему клиенту лучше не использовать 3 класс. Надёжнее написать свой класс для фигуры, реализовав интерфейс IFigure
+// Внешнему клиенту лучше не использовать этот класс. Надёжнее написать свой класс, реализовав интерфейс IFigure
 public class UniversalFigure<T> : IFigure
 {
     private T[] elements;
@@ -174,8 +178,10 @@ public class UniversalFigure<T> : IFigure
 
     public UniversalFigure(Func<T[], double> calcArea, params T[] elements)
     {
-        CalcArea = calcArea;
-        Elements = elements;
+        if (elements == null || elements.Length == 0) throw new ArgumentException(null, nameof(elements));
+        this.elements = elements;
+
+        this.calcArea = calcArea ?? throw new ArgumentException(null, nameof(calcArea));
 
         // Сразу проверяем работоспособность внешней функции с заданными элементами (чтобы хотя бы не выбрасывала исключения)
         // Работоспособность функции, выдача исключений и соответствие между аргументами и функцией

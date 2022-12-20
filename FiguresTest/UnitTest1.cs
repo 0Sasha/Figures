@@ -92,7 +92,7 @@ public class Tests
         figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // Ќесуществующий треугольник - лини€
         Assert.That(figure.Area, Is.EqualTo(0)); // ѕолучаем 0 или
                                                  // можем добавить проверку координат в конструкторе с выбросом исключени€
-
+        
         figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); //  вадрат
         Assert.That(figure.Area, Is.EqualTo(4));
 
@@ -102,7 +102,7 @@ public class Tests
         figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // ќгромный треугольник
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
         Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // ѕолучаем переполнение в методе свойства или
-                                                                          // можем добавить проверку координат в конструкторе
+                                                                          // можем добавить проверку координат
 
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(null));
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(new Point[] { }));
@@ -236,7 +236,7 @@ public class Tests
         Random random = new();
         double ExpectedResult;
 
-        // Ќа этапе компил€ции мы не знаем, какой тип фигуры будет в переменной figure
+        // ћы не знаем, какой тип фигуры будет в переменной figure
         if (random.Next(0, 2) == 1)
         {
             figure = new Circle(23);
