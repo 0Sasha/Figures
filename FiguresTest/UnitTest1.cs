@@ -90,7 +90,8 @@ public class Tests
         Assert.That(figure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
         figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // Несуществующий треугольник - линия
-        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или можем делать проверку координат в конструкторе
+        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или
+                                                 // можем добавить проверку координат в конструкторе с выбросом исключения
 
         figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // Квадрат
         Assert.That(figure.Area, Is.EqualTo(4));
@@ -101,8 +102,8 @@ public class Tests
         figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // Огромный треугольник
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
         Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
-                                                                          // можем делать проверку координат в конструкторе
-        
+                                                                          // можем добавить проверку координат в конструкторе
+
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(null));
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(new Point[] { }));
     }
@@ -129,9 +130,9 @@ public class Tests
         var myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
         Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        // Сторона треугольника больше суммы двух остальных сторон - получаем double.NaN или делаем проверку внутри функции
+        // Сторона треугольника больше суммы двух остальных сторон
         myFigure.Elements[0] = 74;
-        Assert.That(myFigure.Area, Is.EqualTo(double.NaN));
+        Assert.That(myFigure.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или добавляем проверку внутри функции
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
         Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
@@ -154,9 +155,10 @@ public class Tests
 
         // В этом сценарии легко ошибиться с порядком аргументов -
         // передать сначала угол, а затем стороны, и даже не узнать об этом
-        // Поэтому клиенту лучше не использовать такой абстрактный класс с функцией, для которой важен порядок аргументов
+        // Поэтому клиенту лучше не использовать такой абстрактный класс с функцией,
+        // для которой важен порядок аргументов, и нет возможности определить, правильный ли порядок аргументов
         myFigure = new UniversalFigure<double>(myFunc, 90, 3, 4);
-        Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area));
+        Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
 
 
         // Задаём круг по длине окружности
@@ -186,6 +188,7 @@ public class Tests
         // Тестируем ошибку в передаче аргументов. Передаём 1 координату вместо 2.
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, new Point(-4, 0)));
 
+        // Тестируем прочие исключения в конструкторе
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }

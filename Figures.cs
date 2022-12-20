@@ -107,6 +107,8 @@ public class EquilateralPolygon : IFigure
 
 // 2 класс. Произвольная фигура на основе любого количества координат >= 1
 // В качестве координаты используем System.Drawing.Point
+// Этот класс не проверяет корректность координат - эта ответственность на внешнем клиенте
+// Разные уязвимые сценарии тестируем в TestArbitraryFigure
 public class ArbitraryFigure : IFigure
 {
     public Point[] Vertices { get; set; }
