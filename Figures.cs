@@ -9,6 +9,15 @@ namespace Figures;
 // У меня каждая фигура будет реализовывать интерфейс IFigure, чтобы у неё было определено свойство Area.
 // Это тестируем в "TestInterface".
 
+// "Напишите SQL запрос для выбора всех пар «Имя продукта – Имя категории».
+// Если у продукта нет категорий, то его имя все равно должно выводиться."
+
+// Думаю, примерно так:
+// Select ProductName, CategoryName
+// From Products Left Join Categories
+// On Product.Id = Categories.ProductId
+
+
 public class Circle : IFigure
 {
     private double radius;
@@ -116,7 +125,8 @@ public class ArbitraryFigure : IFigure
         get => vertices;
         set
         {
-            if (value == null || value.Length == 0) throw new ArgumentException(null, nameof(value));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(value));
             vertices = value;
         }
     }
@@ -141,7 +151,8 @@ public class ArbitraryFigure : IFigure
 
     public ArbitraryFigure(params Point[] vertices)
     {
-        if (vertices == null || vertices.Length == 0) throw new ArgumentException(null, nameof(vertices));
+        if (vertices == null) throw new ArgumentNullException(nameof(vertices));
+        if (vertices.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(vertices));
         this.vertices = vertices;
     }
 }
@@ -151,11 +162,11 @@ public class ArbitraryFigure : IFigure
 // и функцией для вычисления её площади, на основе заданных элементов
 // (на случай, если внешний клиент совсем ленивый и не хочет писать свой класс)
 
-// Этот класс самый ненадёжный, т.к. легко ошибиться и передать в elements аргументы
-// в неправильном порядке (если для функции важен порядок). Разные уязвимые сценарии рассмотренны в TestUniversalFigure
+// Этот класс самый ненадёжный, т.к. легко ошибиться и передать аргументы, не соответствующие друг другу
+// Разные уязвимые сценарии рассмотренны в TestUniversalFigure
 
 // Внешнему клиенту лучше не использовать этот класс.
-// На мой взгляд, клиенту гораздо проще и разумнее написать свой класс, реализовав интерфейс IFigure
+// На мой взгляд, клиенту проще и разумнее написать для уникальной фигуры свой класс, реализовав интерфейс IFigure
 // Без требования "легкости добавления других фигур" я бы не стал добавлять этот класс в библиотеку
 public class UniversalFigure<T> : IFigure
 {
@@ -167,24 +178,26 @@ public class UniversalFigure<T> : IFigure
         get => elements;
         set
         {
-            if (value == null || value.Length == 0) throw new ArgumentException(null, nameof(value));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(value));
             elements = value;
         }
     }
     public Func<T[], double> CalcArea
     {
         get => calcArea;
-        set => calcArea = value ?? throw new ArgumentException(null, nameof(value));
+        set => calcArea = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     public double Area => CalcArea(Elements);
 
     public UniversalFigure(Func<T[], double> calcArea, params T[] elements)
     {
-        if (elements == null || elements.Length == 0) throw new ArgumentException(null, nameof(elements));
-        this.elements = elements;
+        if (elements == null) throw new ArgumentNullException(nameof(elements));
+        if (elements.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(elements));
 
-        this.calcArea = calcArea ?? throw new ArgumentException(null, nameof(calcArea));
+        this.elements = elements;
+        this.calcArea = calcArea ?? throw new ArgumentNullException(nameof(calcArea));
 
         // Сразу проверяем работоспособность внешней функции с заданными элементами (чтобы хотя бы не выбрасывала исключения)
         // Работоспособность функции, выдача исключений и соответствие между аргументами и функцией
@@ -248,13 +261,29 @@ public static class Calc
             Math.Abs(c * c - (a * a + b * b)) <= double.Epsilon) return true;
         return false;
     }
+
+    public static double GetAreaEquilateralPolygon(int numberOfSides, double lengthOfSide)
+    {
+        if (numberOfSides < 3) throw new ArgumentException("Количество сторон не может быть меньше 3", nameof(numberOfSides));
+        
+        if (double.IsNegative(lengthOfSide) || double.IsNaN(lengthOfSide))
+            throw new ArgumentException("Длина стороны не может быть отрицательной или равной NaN", nameof(lengthOfSide));
+
+        return numberOfSides * (lengthOfSide * lengthOfSide) / (4 * Math.Tan(180 / numberOfSides * (Math.PI / 180)));
+    }
+
+    public static double GetAreaArbitraryFigure(params Point[] vertices)
+    {
+        if (vertices == null) throw new ArgumentNullException(nameof(vertices));
+
+        if (vertices.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(vertices));
+
+        checked
+        {
+            long res = vertices[0].Y * vertices[^1].X - vertices[0].X * vertices[^1].Y;
+            for (int i = 1; i < vertices.Length; i++)
+                res += vertices[i - 1].X * vertices[i].Y - vertices[i - 1].Y * vertices[i].X;
+            return Math.Abs(res) / 2;
+        }
+    }
 }
-
-
-// "Напишите SQL запрос для выбора всех пар «Имя продукта – Имя категории».
-// Если у продукта нет категорий, то его имя все равно должно выводиться."
-
-// Думаю, примерно так:
-// Select ProductName, CategoryName
-// From Products Left Join Categories
-// On Product.Id = Categories.ProductId

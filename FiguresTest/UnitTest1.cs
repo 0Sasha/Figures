@@ -102,10 +102,10 @@ public class Tests
         figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // Огромный треугольник
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
         Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
-                                                                          // можем добавить проверку координат
+                                                                          // можем добавить проверку координат в конструкторе
 
-        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(null));
-        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(new Point[] { }));
+        Assert.Throws<ArgumentNullException>(() => new ArbitraryFigure(null));
+        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(Array.Empty<Point>()));
     }
 
 
@@ -154,7 +154,7 @@ public class Tests
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
         myFigure.CalcArea = myFunc;
-        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь получаем исключение внутри функции
+        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь выбрасываем исключение внутри функции
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
         Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
@@ -211,12 +211,12 @@ public class Tests
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, new Point(-4, 0)));
 
         // Тестируем прочие исключения в конструкторе
-        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
+        Assert.Throws<ArgumentNullException>(() => new UniversalFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }
 
 
-    [Test]
+    [Test] // Тестируем интерфейс
     public void TestInterface()
     {
         IFigure figure;
@@ -290,5 +290,42 @@ public class Tests
         Assert.Throws<ArgumentException>(() => IsRightTriangle(-24, 2, 5));
         Assert.Throws<ArgumentException>(() => IsRightTriangle(double.NaN, 2, 0.2));
         Assert.Throws<ArgumentException>(() => IsRightTriangle(double.MaxValue, 1, 4));
+    }
+
+
+    [TestCase(3, 0, ExpectedResult = 0)]
+    [TestCase(3, 0.1, ExpectedResult = 0.0043301270189221959d)]
+    [TestCase(5, 3, ExpectedResult = 15.484296605300704d)]
+    [TestCase(int.MaxValue, 3, ExpectedResult = double.PositiveInfinity)]
+    public double TestGetAreaEquilateralPolygon(int numberOfSides, double lengthOfSide) =>
+        GetAreaEquilateralPolygon(numberOfSides, lengthOfSide);
+
+    [Test]
+    public void TestGetAreaEquilateralPolygonNotNormalArgument()
+    {
+        Assert.Throws<ArgumentException>(() => GetAreaEquilateralPolygon(2, 0));
+        Assert.Throws<ArgumentException>(() => GetAreaEquilateralPolygon(4, -0.001));
+    }
+
+    [Test]
+    public void TestGetAreaArbitraryFigure()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(GetAreaArbitraryFigure(new Point(3, 4)), Is.EqualTo(0));
+
+            Assert.That(GetAreaArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)), Is.EqualTo(6));
+
+            Assert.That(GetAreaArbitraryFigure(new Point(0, 0),
+                new Point(2, 0), new Point(2, 2), new Point(0, 2)), Is.EqualTo(4));
+
+            Assert.That(GetAreaArbitraryFigure(new Point(3, 4),
+                new Point(5, 11), new Point(12, 8), new Point(9, 5), new Point(5, 6)), Is.EqualTo(30));
+
+            Assert.Throws<ArgumentNullException>(() => GetAreaArbitraryFigure(null));
+            Assert.Throws<ArgumentException>(() => GetAreaArbitraryFigure(Array.Empty<Point>()));
+            Assert.Throws<OverflowException>(() => GetAreaArbitraryFigure(new Point(int.MinValue, int.MaxValue),
+                new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue)));
+        });
     }
 }
