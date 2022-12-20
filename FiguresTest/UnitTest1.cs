@@ -132,7 +132,29 @@ public class Tests
 
         // Сторона треугольника больше суммы двух остальных сторон
         myFigure.Elements[0] = 74;
-        Assert.That(myFigure.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или добавляем проверку внутри функции
+        Assert.That(myFigure.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
+
+        // Заменяем функцию
+        myFunc = new((arrSides) =>
+        {
+            if (arrSides.Length != 3)
+                throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
+
+            double a = arrSides[0];
+            double b = arrSides[1];
+            double c = arrSides[2];
+
+            if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
+                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+
+            if (a + b - c < double.Epsilon || a + c - b < double.Epsilon || b + c - a < double.Epsilon)
+                throw new ArgumentException("Сумма длин двух сторон должна быть больше длины третьей стороны", nameof(a));
+
+            double s = (a + b + c) / 2;
+            return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+        });
+        myFigure.CalcArea = myFunc;
+
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
         Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));

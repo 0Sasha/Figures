@@ -111,7 +111,16 @@ public class EquilateralPolygon : IFigure
 // Разные уязвимые сценарии тестируем в TestArbitraryFigure
 public class ArbitraryFigure : IFigure
 {
-    public Point[] Vertices { get; set; }
+    private Point[] vertices;
+    public Point[] Vertices
+    {
+        get => vertices;
+        set
+        {
+            if (value == null || value.Length == 0) throw new ArgumentException(null, nameof(value));
+            vertices = value;
+        }
+    }
 
     public double Area
     {
@@ -131,11 +140,7 @@ public class ArbitraryFigure : IFigure
         }
     }
 
-    public ArbitraryFigure(params Point[] vertices)
-    {
-        if (vertices == null || vertices.Length == 0) throw new ArgumentException(null, nameof(vertices));
-        Vertices = vertices;
-    }
+    public ArbitraryFigure(params Point[] vertices) => Vertices = vertices;
 }
 
 
@@ -145,18 +150,32 @@ public class ArbitraryFigure : IFigure
 
 // Этот класс самый ненадёжный, т.к. легко ошибиться и передать в elements аргументы
 // в неправильном порядке (если для функции важен порядок). Разные уязвимые сценарии рассмотренны в TestUniversalFigure
+// Внешнему клиенту лучше не использовать 3 класс. Надёжнее написать свой класс для фигуры, реализовав интерфейс IFigure
 public class UniversalFigure<T> : IFigure
 {
-    public T[] Elements { get; }
-    public Func<T[], double> CalcArea { get; }
+    private T[] elements;
+    private Func<T[], double> calcArea;
+
+    public T[] Elements
+    {
+        get => elements;
+        set
+        {
+            if (value == null || value.Length == 0) throw new ArgumentException(null, nameof(value));
+            elements = value;
+        }
+    }
+    public Func<T[], double> CalcArea
+    {
+        get => calcArea;
+        set => calcArea = value ?? throw new ArgumentException(null, nameof(value));
+    }
 
     public double Area => CalcArea(Elements);
 
     public UniversalFigure(Func<T[], double> calcArea, params T[] elements)
     {
-        if (elements == null || elements.Length == 0) throw new ArgumentException(null, nameof(elements));
-
-        CalcArea = calcArea ?? throw new ArgumentException(null, nameof(calcArea));
+        CalcArea = calcArea;
         Elements = elements;
 
         // Сразу проверяем работоспособность внешней функции с заданными элементами (чтобы хотя бы не выбрасывала исключения)
@@ -167,8 +186,8 @@ public class UniversalFigure<T> : IFigure
 }
 
 
-// "Легкость добавления других фигур" с точки зрения разработчика библиотеки склоняет к использованию интерфейса или наследования.
-// Для большей лёгкости можно было бы создать стандартную реализацию методов/свойств интерфейса или базового класса,
+// "Легкость добавления других фигур" с точки зрения разработчика библиотеки склоняет к использованию
+// стандартной реализации методов/свойств интерфейса или базового класса,
 // но у фигур вроде бы нет слишком универсальных черт, кроме наличия площади и периметра, но их реализация зависит от фигуры
 
 
