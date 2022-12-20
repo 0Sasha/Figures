@@ -115,11 +115,17 @@ public class ArbitraryFigure : IFigure
     {
         get
         {
-            // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
-            int res = Vertices[0].Y * Vertices[^1].X - Vertices[0].X * Vertices[^1].Y;
-            for (int i = 1; i < Vertices.Length; i++)
-                res += Vertices[i - 1].X * Vertices[i].Y - Vertices[i - 1].Y * Vertices[i].X;
-            return Math.Abs(res) / 2;
+            // Здесь можно получить переполнение, т.к. мы не проверяем полученные координаты
+            // Можно проверять их сразу в конструкторе или в методе свойства Vertices
+            // Но поскольку Vertices - public массив, можно подменить один элемент уже после проверки,
+            // и тогда проверка здесь на переполнение будет кстати
+            checked
+            {
+                long res = Vertices[0].Y * Vertices[^1].X - Vertices[0].X * Vertices[^1].Y;
+                for (int i = 1; i < Vertices.Length; i++)
+                    res += Vertices[i - 1].X * Vertices[i].Y - Vertices[i - 1].Y * Vertices[i].X;
+                return Math.Abs(res) / 2;
+            }
         }
     }
 

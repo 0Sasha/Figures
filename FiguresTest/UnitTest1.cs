@@ -89,13 +89,20 @@ public class Tests
         figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)); // Прямоугольный треугольник
         Assert.That(figure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // Несуществующий треугольник - линия
+        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или можем делать проверку координат в конструкторе
+
         figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // Квадрат
         Assert.That(figure.Area, Is.EqualTo(4));
 
         figure = new ArbitraryFigure(new Point(3, 4), new Point(5, 11), new Point(12, 8), new Point(9, 5), new Point(5, 6));
         Assert.That(figure.Area, Is.EqualTo(30));
 
-
+        figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // Огромный треугольник
+            new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
+        Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
+                                                                          // можем делать проверку координат в конструкторе
+        
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(null));
         Assert.Throws<ArgumentException>(() => new ArbitraryFigure(new Point[] { }));
     }
