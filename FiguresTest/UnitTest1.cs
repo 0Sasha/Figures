@@ -215,19 +215,6 @@ public class Tests
         Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }
 
-    [Test]
-    public void TestSpeed()
-    {
-        IFigure[] figures = new IFigure[2000];
-        for (int i = 0; i < 500; i++) figures[i] = new Triangle(3, 4, 5);
-        for (int i = 500; i < 1000; i++) figures[i] = new Circle(3);
-        for (int i = 1000; i < 1500; i++) figures[i] = new EquilateralPolygon(5, 3);
-        for (int i = 1500; i < 2000; i++) figures[i] = new ArbitraryFigure(
-            new Point[] { new Point(1, 1), new Point(3, 2), new Point(4, 6), new Point(3, 7) });
-
-        double sumAreas = 0;
-        foreach (var figure in figures) sumAreas += figure.Area;
-    }
 
     [Test]
     public void TestInterface()
