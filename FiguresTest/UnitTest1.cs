@@ -154,7 +154,7 @@ public class Tests
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
         myFigure.CalcArea = myFunc;
-
+        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь получаем исключение внутри функции
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
         Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
@@ -177,7 +177,7 @@ public class Tests
 
         // В этом сценарии легко ошибиться с порядком аргументов -
         // передать сначала угол, а затем стороны, и даже не узнать об этом
-        // Поэтому клиенту лучше не использовать такой абстрактный класс с функцией,
+        // Поэтому клиенту лучше не использовать такой класс с функцией,
         // для которой важен порядок аргументов, и нет возможности определить, правильный ли порядок аргументов
         myFigure = new UniversalFigure<double>(myFunc, 90, 3, 4);
         Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
