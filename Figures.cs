@@ -67,7 +67,7 @@ public class Triangle : IFigure
 
 
 // Для "легкости добавления других фигур" с точки зрения внешнего клиента написал следующие классы:
-// 1. Правильный многоугольник с любым количеством сторон >= 3 и любой длиной сторон >= 0
+// 1 класс. Правильный многоугольник с любым количеством сторон >= 3 и любой длиной сторон >= 0
 public class EquilateralPolygon : IFigure
 {
     private int numberOfSides;
@@ -105,7 +105,7 @@ public class EquilateralPolygon : IFigure
 }
 
 
-// 2. Произвольная фигура на основе любого количества координат >= 1
+// 2 класс. Произвольная фигура на основе любого количества координат >= 1
 // В качестве координаты используем System.Drawing.Point
 public class ArbitraryFigure : IFigure
 {
@@ -137,24 +137,24 @@ public class ArbitraryFigure : IFigure
 }
 
 
-// 3. Универсальная фигура, заданная массивом любых элементов
-// и функцией для вычисления её площади, на основе заданных элементов 
+// 3 класс. Универсальная фигура, заданная массивом любых элементов
+// и функцией для вычисления её площади, на основе заданных элементов
 // (на случай, если внешний клиент совсем ленивый и не хочет писать свой класс)
 
 // Этот класс самый ненадёжный, т.к. легко ошибиться и передать в elements аргументы
-// в неправильном порядке (если для функции важен порядок). Разные уязвимые сценарии рассмотренны в тесте.
+// в неправильном порядке (если для функции важен порядок). Разные уязвимые сценарии рассмотренны в TestUniversalFigure
 public class UniversalFigure<T> : IFigure
 {
     public T[] Elements { get; }
-    private Func<T[], double> CalcArea { get; }
+    public Func<T[], double> CalcArea { get; }
 
     public double Area => CalcArea(Elements);
 
-    public UniversalFigure(Func<T[], double> funcForCalcArea, params T[] elements)
+    public UniversalFigure(Func<T[], double> calcArea, params T[] elements)
     {
         if (elements == null || elements.Length == 0) throw new ArgumentException(null, nameof(elements));
 
-        CalcArea = funcForCalcArea ?? throw new ArgumentException(null, nameof(funcForCalcArea));
+        CalcArea = calcArea ?? throw new ArgumentException(null, nameof(calcArea));
         Elements = elements;
 
         // Сразу проверяем работоспособность внешней функции с заданными элементами (чтобы хотя бы не выбрасывала исключения)
