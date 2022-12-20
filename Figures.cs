@@ -24,9 +24,9 @@ public class Circle : IFigure
         }
     }
 
-    public double Area => Radius * Radius * Math.PI;
     // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
     // Можно хранить значение площади в отдельном поле и пересчитывать только тогда, когда меняется радиус
+    public double Area => Radius * Radius * Math.PI;
 
     public Circle(double radius) => Radius = radius;
 }
@@ -87,14 +87,15 @@ public class EquilateralPolygon : IFigure
         get => lengthOfSide;
         set
         {
-            if (value < 0) throw new ArgumentException("Длина стороны не может быть меньше 0", nameof(value));
+            if (double.IsNegative(value) || double.IsNaN(value))
+                throw new ArgumentException("Длина стороны не может быть отрицательной или равной NaN", nameof(value));
             lengthOfSide = value;
         }
     }
 
+    // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
     public double Area =>
         NumberOfSides * (LengthOfSide * LengthOfSide) / (4 * Math.Tan(180 / NumberOfSides * (Math.PI / 180)));
-    // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
 
     public EquilateralPolygon(int numberOfSides, double lengthOfSide)
     {
@@ -114,6 +115,7 @@ public class ArbitraryFigure : IFigure
     {
         get
         {
+            // Если результат - бесконечность, предполагаем, что пользователь готов с этим работать
             int res = Vertices[0].Y * Vertices[^1].X - Vertices[0].X * Vertices[^1].Y;
             for (int i = 1; i < Vertices.Length; i++)
                 res += Vertices[i - 1].X * Vertices[i].Y - Vertices[i - 1].Y * Vertices[i].X;
