@@ -121,24 +121,14 @@ public class EquilateralPolygon : IFigure
 // Разные уязвимые сценарии тестируем в TestArbitraryFigure
 public class ArbitraryFigure : IFigure
 {
-    private Point[] vertices;
-    public Point[] Vertices
-    {
-        get => vertices;
-        set
-        {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(value));
-            vertices = value;
-        }
-    }
+    public Point[] Vertices { get; set; }
 
     public double Area
     {
         get
         {
             // Здесь можно получить переполнение, т.к. мы не проверяем полученные координаты
-            // Можно проверять их сразу в конструкторе или в методе свойства Vertices
+            // Можно проверять их в конструкторе или в методе свойства Vertices
             // Но, поскольку Vertices - public массив, можно подменить элементы по индексу уже после проверки,
             // и тогда проверка на переполнение в этом месте будет кстати
             checked
@@ -151,12 +141,7 @@ public class ArbitraryFigure : IFigure
         }
     }
 
-    public ArbitraryFigure(params Point[] vertices)
-    {
-        if (vertices == null) throw new ArgumentNullException(nameof(vertices));
-        if (vertices.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(vertices));
-        this.vertices = vertices;
-    }
+    public ArbitraryFigure(params Point[] vertices) => Vertices = vertices;
 }
 
 

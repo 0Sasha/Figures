@@ -80,10 +80,20 @@ public class Tests
     [Test] // Тестируем произвольную фигуру на основе любого количества координат >= 1
     public void TestArbitraryFigure()
     {
-        var figure = new ArbitraryFigure(new Point(3, 4)); // Просто точка
+        var figure = new ArbitraryFigure();
+        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // Забыли передать координаты и вызвали свойство
+
+        figure = new ArbitraryFigure(Array.Empty<Point>());
+        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // Передали пустой массив
+
+        figure = new ArbitraryFigure(null);
+        Assert.Throws<NullReferenceException>(() => { var x = figure.Area; }); // Передали массив null
+
+
+        figure.Vertices = new[] { new Point(3, 4) }; // Просто точка
         Assert.That(figure.Area, Is.EqualTo(0));
 
-        figure = new ArbitraryFigure(new Point(3, 4), new Point(3, 8)); // Отрезок
+        figure = new ArbitraryFigure(new Point(3, 4), new Point(3, 8)); // Отрезок имеет площадь 0
         Assert.That(figure.Area, Is.EqualTo(0));
 
         figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)); // Прямоугольный треугольник
@@ -103,9 +113,6 @@ public class Tests
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
         Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
                                                                           // можем добавить проверку координат в конструкторе
-
-        Assert.Throws<ArgumentNullException>(() => new ArbitraryFigure(null));
-        Assert.Throws<ArgumentException>(() => new ArbitraryFigure(Array.Empty<Point>()));
     }
 
 
