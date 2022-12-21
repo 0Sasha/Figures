@@ -134,7 +134,7 @@ public class Tests
         myFigure.Elements[0] = 74;
         Assert.That(myFigure.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
 
-        // Заменяем функцию
+        // Добавляем в функцию проверку сторон
         myFunc = new((arrSides) =>
         {
             if (arrSides.Length != 3)
@@ -154,7 +154,7 @@ public class Tests
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
         myFigure.CalcArea = myFunc;
-        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь выбрасываем исключение внутри функции
+        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь получаем исключение
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
         Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
