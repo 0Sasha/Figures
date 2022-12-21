@@ -41,6 +41,8 @@ public class Circle : IFigure
 public class Triangle : IFigure
 {
     // Пусть стороны будут неизменяемы, чтобы не проверять нарушение правила: сумма длин двух сторон больше третьей
+    // Чтобы получить треугольник с совершенно другими размерами, проще создать новый,
+    // чем постепенно подтягивать каждую сторону, не нарушая это правило
     public double SideA { get; }
     public double SideB { get; }
     public double SideC { get; }
@@ -67,9 +69,9 @@ public class Triangle : IFigure
         Area = Math.Sqrt(s * (s - a) * (s - b) * (s - c));
 
         // И сразу определим, прямоугольный ли треугольник
-        if (Math.Abs(a * a - (b * b + c * c)) <= double.Epsilon ||
-            Math.Abs(b * b - (a * a + c * c)) <= double.Epsilon ||
-            Math.Abs(c * c - (a * a + b * b)) <= double.Epsilon) IsRightTriangle = true;
+        if (a > b && a > c && Math.Abs(a * a - (b * b + c * c)) <= double.Epsilon ||
+            b > a && b > c && Math.Abs(b * b - (a * a + c * c)) <= double.Epsilon ||
+            c > a && c > b && Math.Abs(c * c - (a * a + b * b)) <= double.Epsilon) IsRightTriangle = true;
     }
 }
 
@@ -137,7 +139,7 @@ public class ArbitraryFigure : IFigure
         {
             // Здесь можно получить переполнение, т.к. мы не проверяем полученные координаты
             // Можно проверять их сразу в конструкторе или в методе свойства Vertices
-            // Но поскольку Vertices - public массив, можно подменить один элемент уже после проверки,
+            // Но, поскольку Vertices - public массив, можно подменить элементы по индексу уже после проверки,
             // и тогда проверка на переполнение в этом месте будет кстати
             checked
             {

@@ -37,7 +37,7 @@ public class Tests
             Assert.That(new Triangle(3, 4, 5.000000000001).IsRightTriangle, Is.False);
             Assert.That(new Triangle(3, 4, 4.999999999999).IsRightTriangle, Is.False);
 
-            Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12));
+            Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12)); // Сумма 2 сторон равна 3 стороне
             Assert.Throws<ArgumentException>(() => new Triangle(0, 12, 3));
             Assert.Throws<ArgumentException>(() => new Triangle(-24, 2, 5));
             Assert.Throws<ArgumentException>(() => new Triangle(double.NaN, 2, 0.2));
@@ -54,7 +54,7 @@ public class Tests
         polygon.LengthOfSide = 0.1;
         Assert.That(polygon.Area, Is.EqualTo(0.0043301270189221959d));
 
-        polygon.LengthOfSide = 3;
+        polygon = new(3, 3);                                         // Равносторонний треугольник с длиной стороны 3
         Assert.That(polygon.Area, Is.EqualTo(3.8971143170299753d));
 
         Assert.That(Math.Round(polygon.Area, 12),                    // Сравниваем разные формулы из двух классов
@@ -63,8 +63,8 @@ public class Tests
         polygon.NumberOfSides = 5;
         Assert.That(polygon.Area, Is.EqualTo(15.484296605300704d));
 
-        polygon = new EquilateralPolygon(4, 2);
-        Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4)); // Немного не хватает точности, округляем
+        polygon = new EquilateralPolygon(4, 2);                      // Квадрат 2х2
+        Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4));    // Немного не хватает точности, округляем
         // Возможно, стоит сразу немного округлять в методах свойств всех классов
 
         polygon.NumberOfSides = int.MaxValue;
