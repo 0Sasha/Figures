@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Runtime.Intrinsics.X86;
 using static Figures.Calc;
 
 namespace Figures.Test;
@@ -119,9 +120,6 @@ public class Tests
     [Test] // Тестируем произвольную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
     public void TestGenericArbitraryFigure()
     {
-        var myTriangle = new ArbitraryFigure<double>(null, 3, 4, 5); // Передали null функцию
-        Assert.Throws<NullReferenceException>(() => { var x = myTriangle.Area; });
-
         // Задаём функцию для вычисления площади треугольника по трём сторонам
         Func<double[], double> myFunc = new((arrSides) =>
         {
@@ -134,15 +132,24 @@ public class Tests
             double b = arrSides[1];
             double c = arrSides[2];
 
+            if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
+                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+
             double s = (a + b + c) / 2;
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
+
+        var myTriangle = new ArbitraryFigure<double>(null, 3, 4, 5); // Передали null функцию
+        Assert.Throws<NullReferenceException>(() => { var x = myTriangle.Area; });
 
         myTriangle = new ArbitraryFigure<double>(myFunc); // Забыли передать массив сторон
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
         myTriangle = new ArbitraryFigure<double>(myFunc, null); // Передали null массив
         Assert.Throws<ArgumentNullException>(() => { var x = myTriangle.Area; });
+
+        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // Ошиблись с количеством сторон
+        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
         myTriangle.Elements = new double[] { 3, 4, 5 }; // Добавляем правильный массив сторон
         Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
@@ -174,19 +181,22 @@ public class Tests
         myTriangle.CalcArea = myFunc;
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; }); // Теперь получаем исключение
 
-        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // Ошиблись с количеством аргументов
-        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
-
 
         // Задаём треугольник двумя сторонами и углом между ними
         myFunc = new((elements) =>
         {
+            if (elements == null) throw new ArgumentNullException(nameof(elements));
+
             if (elements.Length != 3)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
 
             double side1 = elements[0];
             double side2 = elements[1];
             double angleBetween = elements[2];
+
+            if (side1 <= 0 || side2 <= 0 || angleBetween <= 0 ||
+            double.IsNaN(side1) || double.IsNaN(side2) || double.IsNaN(angleBetween))
+                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(elements));
 
             return side1 * side2 / 2 * Math.Sin(angleBetween / 180 * Math.PI);
         });
@@ -206,6 +216,9 @@ public class Tests
         {
             if (elements.Length != 1)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+
+            if (elements[0] <= 0 || double.IsNaN(elements[0]))
+                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(elements));
 
             return elements[0] * elements[0] / (4 * Math.PI);
         });
