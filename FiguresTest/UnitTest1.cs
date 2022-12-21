@@ -109,8 +109,8 @@ public class Tests
     }
 
 
-    [Test] // Тестируем универсальную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
-    public void TestUniversalFigure()
+    [Test] // Тестируем произвольную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
+    public void TestGenericArbitraryFigure()
     {
         // Задаём функцию для вычисления площади треугольника по трём сторонам
         Func<double[], double> myFunc = new((arrSides) =>
@@ -127,12 +127,12 @@ public class Tests
         });
 
         // Задаём треугольник тремя сторонами и функцией
-        var myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5);
-        Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+        var myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5);
+        Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
         // Сторона треугольника больше суммы двух остальных сторон
-        myFigure.Elements[0] = 74;
-        Assert.That(myFigure.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
+        myTriangle.Elements[0] = 74;
+        Assert.That(myTriangle.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
 
         // Добавляем в функцию проверку сторон
         myFunc = new((arrSides) =>
@@ -153,11 +153,11 @@ public class Tests
             double s = (a + b + c) / 2;
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
-        myFigure.CalcArea = myFunc;
-        Assert.Throws<ArgumentException>(() => { var x = myFigure.Area; }); // Теперь получаем исключение
+        myTriangle.CalcArea = myFunc;
+        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; }); // Теперь получаем исключение
 
         // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
-        Assert.Throws<ArgumentException>(() => myFigure = new UniversalFigure<double>(myFunc, 3, 4, 5, 6));
+        Assert.Throws<ArgumentException>(() => myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6));
 
 
         // Задаём треугольник двумя сторонами и углом между ними
@@ -172,15 +172,15 @@ public class Tests
 
             return side1 * side2 / 2 * Math.Sin(angleBetween / 180 * Math.PI);
         });
-        myFigure = new UniversalFigure<double>(myFunc, 3, 4, 90);
-        Assert.That(myFigure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
+        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 90);
+        Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
         // В этом сценарии легко ошибиться с порядком аргументов -
         // передать сначала угол, а затем стороны, и даже не узнать об этом
         // Поэтому клиенту лучше не использовать такой класс с функцией,
         // для которой важен порядок аргументов, и нет возможности определить, правильный ли порядок аргументов
-        myFigure = new UniversalFigure<double>(myFunc, 90, 3, 4);
-        Assert.That(myFigure.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
+        myTriangle = new ArbitraryFigure<double>(myFunc, 90, 3, 4);
+        Assert.That(myTriangle.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
 
 
         // Задаём круг по длине окружности
@@ -191,8 +191,8 @@ public class Tests
 
             return elements[0] * elements[0] / (4 * Math.PI);
         });
-        myFigure = new UniversalFigure<double>(myFunc, 2 * Math.PI);
-        Assert.That(myFigure.Area, Is.EqualTo(new Circle(1).Area));
+        var myCircle = new ArbitraryFigure<double>(myFunc, 2 * Math.PI);
+        Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
 
 
         // Задаём квадрат по 2 координатам. Теперь используем Point[]
@@ -203,16 +203,15 @@ public class Tests
 
             return Math.Abs((elements[0].X - elements[1].X) * (elements[0].Y - elements[1].Y));
         });
-        var myPointFigure = new UniversalFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
-        Assert.That(myPointFigure.Area, Is.EqualTo(16));
-
+        var mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
+        Assert.That(mySquare.Area, Is.EqualTo(16));
 
         // Тестируем ошибку в передаче аргументов. Передаём 1 координату вместо 2.
-        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, new Point(-4, 0)));
+        Assert.Throws<ArgumentException>(() => new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0)));
 
         // Тестируем прочие исключения в конструкторе
-        Assert.Throws<ArgumentNullException>(() => new UniversalFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
-        Assert.Throws<ArgumentException>(() => new UniversalFigure<Point>(myPointFunc, Array.Empty<Point>()));
+        Assert.Throws<ArgumentNullException>(() => new ArbitraryFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
+        Assert.Throws<ArgumentException>(() => new ArbitraryFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }
 
 

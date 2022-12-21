@@ -160,7 +160,7 @@ public class ArbitraryFigure : IFigure
 }
 
 
-// 3 класс. Универсальная фигура, заданная массивом любых элементов
+// 3 класс. Произвольная фигура, заданная массивом любых элементов
 // и функцией для вычисления её площади, на основе заданных элементов
 // (на случай, если внешний клиент совсем ленивый и не хочет писать свой класс)
 
@@ -170,7 +170,7 @@ public class ArbitraryFigure : IFigure
 // Внешнему клиенту лучше не использовать этот класс.
 // На мой взгляд, клиенту проще и разумнее написать для уникальной фигуры свой класс, реализовав интерфейс IFigure
 // Без требования "легкости добавления других фигур" я бы не стал добавлять этот класс в библиотеку
-public class UniversalFigure<T> : IFigure
+public class ArbitraryFigure<T> : IFigure
 {
     private T[] elements;
     private Func<T[], double> calcArea;
@@ -193,7 +193,7 @@ public class UniversalFigure<T> : IFigure
 
     public double Area => CalcArea(Elements);
 
-    public UniversalFigure(Func<T[], double> calcArea, params T[] elements)
+    public ArbitraryFigure(Func<T[], double> calcArea, params T[] elements)
     {
         if (elements == null) throw new ArgumentNullException(nameof(elements));
         if (elements.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(elements));
