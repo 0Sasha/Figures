@@ -157,39 +157,17 @@ public class ArbitraryFigure : IFigure
 // Без требования "легкости добавления других фигур" я бы не стал добавлять этот класс в библиотеку
 public class ArbitraryFigure<T> : IFigure
 {
-    private T[] elements;
-    private Func<T[], double> calcArea;
-
-    public T[] Elements
-    {
-        get => elements;
-        set
-        {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(value));
-            elements = value;
-        }
-    }
-    public Func<T[], double> CalcArea
-    {
-        get => calcArea;
-        set => calcArea = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    public T[] Elements { get; set; }
+    public Func<T[], double> CalcArea { get; set; }
 
     public double Area => CalcArea(Elements);
 
     public ArbitraryFigure(Func<T[], double> calcArea, params T[] elements)
     {
-        if (elements == null) throw new ArgumentNullException(nameof(elements));
-        if (elements.Length == 0) throw new ArgumentException("Длина массива равна нулю", nameof(elements));
-
-        this.elements = elements;
-        this.calcArea = calcArea ?? throw new ArgumentNullException(nameof(calcArea));
-
-        // Сразу проверяем работоспособность внешней функции с заданными элементами (чтобы хотя бы не выбрасывала исключения)
         // Работоспособность функции, выдача исключений и соответствие между аргументами в elements и функцией calcArea
         // в ответственности внешнего клиента
-        CalcArea(Elements);
+        Elements = elements;
+        CalcArea = calcArea;
     }
 }
 

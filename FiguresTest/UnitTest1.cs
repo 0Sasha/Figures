@@ -119,9 +119,14 @@ public class Tests
     [Test] // Тестируем произвольную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
     public void TestGenericArbitraryFigure()
     {
+        var myTriangle = new ArbitraryFigure<double>(null, 3, 4, 5); // Передали null функцию
+        Assert.Throws<NullReferenceException>(() => { var x = myTriangle.Area; });
+
         // Задаём функцию для вычисления площади треугольника по трём сторонам
         Func<double[], double> myFunc = new((arrSides) =>
         {
+            if (arrSides == null) throw new ArgumentNullException(nameof(arrSides));
+
             if (arrSides.Length != 3)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
 
@@ -133,17 +138,23 @@ public class Tests
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
 
-        // Задаём треугольник тремя сторонами и функцией
-        var myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5);
+        myTriangle = new ArbitraryFigure<double>(myFunc); // Забыли передать массив сторон
+        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
+
+        myTriangle = new ArbitraryFigure<double>(myFunc, null); // Передали null массив
+        Assert.Throws<ArgumentNullException>(() => { var x = myTriangle.Area; });
+
+        myTriangle.Elements = new double[] { 3, 4, 5 }; // Добавляем правильный массив сторон
         Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        // Сторона треугольника больше суммы двух остальных сторон
-        myTriangle.Elements[0] = 74;
+        myTriangle.Elements[0] = 74; // Сторона треугольника больше суммы двух остальных сторон
         Assert.That(myTriangle.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
 
         // Добавляем в функцию проверку сторон
         myFunc = new((arrSides) =>
         {
+            if (arrSides == null) throw new ArgumentNullException(nameof(arrSides));
+
             if (arrSides.Length != 3)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
 
@@ -163,8 +174,8 @@ public class Tests
         myTriangle.CalcArea = myFunc;
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; }); // Теперь получаем исключение
 
-        // Ошиблись с количеством аргументов - функция выбросит исключение в конструкторе
-        Assert.Throws<ArgumentException>(() => myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6));
+        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // Ошиблись с количеством аргументов
+        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
 
         // Задаём треугольник двумя сторонами и углом между ними
@@ -212,13 +223,6 @@ public class Tests
         });
         var mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
         Assert.That(mySquare.Area, Is.EqualTo(16));
-
-        // Тестируем ошибку в передаче аргументов. Передаём 1 координату вместо 2.
-        Assert.Throws<ArgumentException>(() => new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0)));
-
-        // Тестируем прочие исключения в конструкторе
-        Assert.Throws<ArgumentNullException>(() => new ArbitraryFigure<Point>(null, new Point(-4, 0), new Point(0, 4)));
-        Assert.Throws<ArgumentException>(() => new ArbitraryFigure<Point>(myPointFunc, Array.Empty<Point>()));
     }
 
 
