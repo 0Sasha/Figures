@@ -151,10 +151,10 @@ public class Tests
         myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // Ошиблись с количеством сторон
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
-        myTriangle.Elements = new double[] { 3, 4, 5 }; // Добавляем правильный массив сторон
+        myTriangle.Elements = new double[] { 3, 4, 5 }; // Передали правильный массив сторон
         Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        myTriangle.Elements[0] = 74; // Сторона треугольника больше суммы двух остальных сторон
+        myTriangle.Elements[0] = 74;                          // Сторона треугольника больше суммы двух остальных сторон
         Assert.That(myTriangle.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
 
         // Добавляем в функцию проверку сторон
@@ -226,7 +226,7 @@ public class Tests
         Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
 
 
-        // Задаём квадрат по 2 координатам. Теперь используем Point[]
+        // Задаём квадрат по 2 координатам Point
         Func<Point[], double> myPointFunc = new((elements) =>
         {
             if (elements.Length != 2)
