@@ -66,7 +66,7 @@ public class Tests
 
         polygon = new EquilateralPolygon(4, 2);                      // Квадрат 2х2
         Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4));    // Немного не хватает точности, округляем
-        // Возможно, стоит сразу немного округлять в методах свойств всех классов
+                                                // Возможно, стоит сразу выдавать немного округлённую Area во всех классах
 
         polygon.NumberOfSides = int.MaxValue;
         Assert.That(polygon.Area, Is.EqualTo(double.PositiveInfinity));
@@ -101,9 +101,9 @@ public class Tests
         Assert.That(figure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
         figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // Несуществующий треугольник - линия
-        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или
-                                                 // можем добавить проверку координат в конструкторе с выбросом исключения
-        
+        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или можем добавить проверку координат в методе свойства Vertices
+                                                 // с выбросом исключения, когда все точки имеют одинаковый X или одинаковый Y
+
         figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // Квадрат
         Assert.That(figure.Area, Is.EqualTo(4));
 
@@ -113,7 +113,7 @@ public class Tests
         figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // Огромный треугольник
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
         Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
-                                                                          // можем добавить проверку координат в конструкторе
+                                                                 // можем добавить проверку координат в методе свойства Vertices
     }
 
 
@@ -232,10 +232,17 @@ public class Tests
             if (elements.Length != 2)
                 throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
 
-            return Math.Abs((elements[0].X - elements[1].X) * (elements[0].Y - elements[1].Y));
+            checked
+            {
+                return Math.Abs((elements[0].X - elements[1].X) * (elements[0].Y - elements[1].Y));
+            }
         });
         var mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
         Assert.That(mySquare.Area, Is.EqualTo(16));
+
+        // Тестируем переполнение
+        mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(int.MinValue, 0), new Point(0, 7));
+        Assert.Throws<OverflowException>(() => { var x = mySquare.Area; });
     }
 
 
@@ -270,6 +277,7 @@ public class Tests
     [TestCase(23, ExpectedResult = 1661.9025137490005)]
     [TestCase(1.27, ExpectedResult = 5.067074790974977)]
     [TestCase(972872782742778678578D, ExpectedResult = 2.973459174482516e+42)]
+    [TestCase(double.MaxValue, ExpectedResult = double.PositiveInfinity)]
     public double TestGetAreaCircleByRadius(double radius) => GetAreaCircleByRadius(radius);
 
     [Test]
@@ -277,14 +285,13 @@ public class Tests
     {
         Assert.Throws<ArgumentException>(() => GetAreaCircleByRadius(-654));
         Assert.Throws<ArgumentException>(() => GetAreaCircleByRadius(double.NaN));
-        Assert.Throws<ArgumentException>(() => GetAreaCircleByRadius(double.MaxValue));
     }
 
 
     [TestCase(2, 4.21, 3.47, ExpectedResult = 3.4443907095450124d)]
     [TestCase(548543, 645557, 753424, ExpectedResult = 173041408016.02628d)]
-    [TestCase(9, 3, 11.9999999999, ExpectedResult = 0.00012727809540592021d)] // Сумма длин 2 сторон почти равна 3 стороне - ОК
-    [TestCase(0.00000001, 0.00000001, 0.00000001, ExpectedResult = 4.3301270189221959E-17d)] // Значения близки к 0 - ОК
+    [TestCase(9, 3, 11.9999999999, ExpectedResult = 0.00012727809540592021d)]
+    [TestCase(0.00000001, 0.00000001, 0.00000001, ExpectedResult = 4.3301270189221959E-17d)]
     public double TestGetAreaTriangleBySides(double a, double b, double c) => GetAreaTriangleBySides(a, b, c);
 
     [Test]
@@ -335,7 +342,7 @@ public class Tests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(GetAreaArbitraryFigure(new Point(3, 4)), Is.EqualTo(0));
+            Assert.That(GetAreaArbitraryFigure(new Point(3, 4)), Is.EqualTo(0)); // Точка
 
             Assert.That(GetAreaArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)), Is.EqualTo(6));
 
