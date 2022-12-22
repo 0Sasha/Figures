@@ -120,6 +120,12 @@ public class Tests
     [Test] // Тестируем произвольную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
     public void TestGenericArbitraryFigure()
     {
+        // Задаём круг по длине окружности
+        var myCircle = new ArbitraryFigure<double>((elements) => elements[0] * elements[0] / (4 * Math.PI),
+            2 * Math.PI);
+        Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
+
+
         // Задаём функцию для вычисления площади треугольника по трём сторонам
         Func<double[], double> myFunc = new((arrSides) =>
         {
@@ -209,12 +215,6 @@ public class Tests
         // для которой важен порядок аргументов, и нет возможности определить, правильный ли порядок аргументов
         myTriangle = new ArbitraryFigure<double>(myFunc, 90, 3, 4);
         Assert.That(myTriangle.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
-
-
-        // Задаём круг по длине окружности
-        var myCircle = new ArbitraryFigure<double>((elements) => elements[0] * elements[0] / (4 * Math.PI),
-            2 * Math.PI);
-        Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
 
 
         // Задаём квадрат по 2 координатам Point
