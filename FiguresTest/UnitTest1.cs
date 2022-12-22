@@ -14,6 +14,7 @@ public class Tests
     }
 
 
+
     [Test] // Тестируем круг и треугольник
     public void TestClasses()
     {
