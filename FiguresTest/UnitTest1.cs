@@ -212,17 +212,8 @@ public class Tests
 
 
         // Задаём круг по длине окружности
-        myFunc = new((elements) =>
-        {
-            if (elements.Length != 1)
-                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
-
-            if (elements[0] <= 0 || double.IsNaN(elements[0]))
-                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(elements));
-
-            return elements[0] * elements[0] / (4 * Math.PI);
-        });
-        var myCircle = new ArbitraryFigure<double>(myFunc, 2 * Math.PI);
+        var myCircle = new ArbitraryFigure<double>((elements) => elements[0] * elements[0] / (4 * Math.PI),
+            2 * Math.PI);
         Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
 
 
