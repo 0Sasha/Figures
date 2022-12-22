@@ -1,6 +1,6 @@
 using System;
 using System.Drawing;
-using System.Runtime.Intrinsics.X86;
+using NUnit.Framework;
 using static Figures.Calc;
 
 namespace Figures.Test;
