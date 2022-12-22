@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Drawing;
 using NUnit.Framework;
 using static Figures.Calc;
@@ -10,11 +10,11 @@ public class Tests
     [SetUp]
     public void Setup()
     {
-        // Нечего настраивать
+        // РќРµС‡РµРіРѕ РЅР°СЃС‚СЂР°РёРІР°С‚СЊ
     }
 
 
-    [Test] // Тестируем круг и треугольник
+    [Test] // РўРµСЃС‚РёСЂСѓРµРј РєСЂСѓРі Рё С‚СЂРµСѓРіРѕР»СЊРЅРёРє
     public void TestClasses()
     {
         Assert.Multiple(() =>
@@ -38,7 +38,7 @@ public class Tests
             Assert.That(new Triangle(3, 4, 5.000000000001).IsRightTriangle, Is.False);
             Assert.That(new Triangle(3, 4, 4.999999999999).IsRightTriangle, Is.False);
 
-            Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12)); // Сумма 2 сторон равна 3 стороне
+            Assert.Throws<ArgumentException>(() => new Triangle(9, 3, 12)); // РЎСѓРјРјР° 2 СЃС‚РѕСЂРѕРЅ СЂР°РІРЅР° 3 СЃС‚РѕСЂРѕРЅРµ
             Assert.Throws<ArgumentException>(() => new Triangle(0, 12, 3));
             Assert.Throws<ArgumentException>(() => new Triangle(-24, 2, 5));
             Assert.Throws<ArgumentException>(() => new Triangle(double.NaN, 2, 0.2));
@@ -46,155 +46,155 @@ public class Tests
     }
 
 
-    [Test] // Тестируем правильный многоугольник с любым количеством сторон >= 3 и любой длиной сторон >= 0
+    [Test] // РўРµСЃС‚РёСЂСѓРµРј РїСЂР°РІРёР»СЊРЅС‹Р№ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРє СЃ Р»СЋР±С‹Рј РєРѕР»РёС‡РµСЃС‚РІРѕРј СЃС‚РѕСЂРѕРЅ >= 3 Рё Р»СЋР±РѕР№ РґР»РёРЅРѕР№ СЃС‚РѕСЂРѕРЅ >= 0
     public void TestEquilateralPolygon()
     {
-        EquilateralPolygon polygon = new(3, 0); // Три стороны с нулевой длиной
+        EquilateralPolygon polygon = new(3, 0); // РўСЂРё СЃС‚РѕСЂРѕРЅС‹ СЃ РЅСѓР»РµРІРѕР№ РґР»РёРЅРѕР№
         Assert.That(polygon.Area, Is.EqualTo(0));
 
         polygon.LengthOfSide = 0.1;
         Assert.That(polygon.Area, Is.EqualTo(0.0043301270189221959d));
 
-        polygon = new(3, 3);                                         // Равносторонний треугольник с длиной стороны 3
+        polygon = new(3, 3);                                         // Р Р°РІРЅРѕСЃС‚РѕСЂРѕРЅРЅРёР№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє СЃ РґР»РёРЅРѕР№ СЃС‚РѕСЂРѕРЅС‹ 3
         Assert.That(polygon.Area, Is.EqualTo(3.8971143170299753d));
 
-        Assert.That(Math.Round(polygon.Area, 12),                    // Сравниваем разные формулы из двух классов
-            Is.EqualTo(Math.Round(new Triangle(3, 3, 3).Area, 12))); // Немного не хватает точности, приходится округлять
+        Assert.That(Math.Round(polygon.Area, 12),                    // РЎСЂР°РІРЅРёРІР°РµРј СЂР°Р·РЅС‹Рµ С„РѕСЂРјСѓР»С‹ РёР· РґРІСѓС… РєР»Р°СЃСЃРѕРІ
+            Is.EqualTo(Math.Round(new Triangle(3, 3, 3).Area, 12))); // РќРµРјРЅРѕРіРѕ РЅРµ С…РІР°С‚Р°РµС‚ С‚РѕС‡РЅРѕСЃС‚Рё, РїСЂРёС…РѕРґРёС‚СЃСЏ РѕРєСЂСѓРіР»СЏС‚СЊ
 
         polygon.NumberOfSides = 5;
         Assert.That(polygon.Area, Is.EqualTo(15.484296605300704d));
 
-        polygon = new EquilateralPolygon(4, 2);                      // Квадрат 2х2
-        Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4));    // Немного не хватает точности, округляем
-                                                // Возможно, стоит сразу выдавать немного округлённую Area во всех классах
+        polygon = new EquilateralPolygon(4, 2);                      // РљРІР°РґСЂР°С‚ 2С…2
+        Assert.That(Math.Round(polygon.Area, 12), Is.EqualTo(4));    // РќРµРјРЅРѕРіРѕ РЅРµ С…РІР°С‚Р°РµС‚ С‚РѕС‡РЅРѕСЃС‚Рё, РѕРєСЂСѓРіР»СЏРµРј
+                                                // Р’РѕР·РјРѕР¶РЅРѕ, СЃС‚РѕРёС‚ СЃСЂР°Р·Сѓ РІС‹РґР°РІР°С‚СЊ РЅРµРјРЅРѕРіРѕ РѕРєСЂСѓРіР»С‘РЅРЅСѓСЋ Area РІРѕ РІСЃРµС… РєР»Р°СЃСЃР°С…
 
         polygon.NumberOfSides = int.MaxValue;
         Assert.That(polygon.Area, Is.EqualTo(double.PositiveInfinity));
 
 
-        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(2, 2)); // 2 стороны
-        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(-1, 2)); // -1 сторона
-        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(4, -3)); // Отрицательная длина
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(2, 2)); // 2 СЃС‚РѕСЂРѕРЅС‹
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(-1, 2)); // -1 СЃС‚РѕСЂРѕРЅР°
+        Assert.Throws<ArgumentException>(() => new EquilateralPolygon(4, -3)); // РћС‚СЂРёС†Р°С‚РµР»СЊРЅР°СЏ РґР»РёРЅР°
     }
 
 
-    [Test] // Тестируем произвольную фигуру на основе любого количества координат >= 1
+    [Test] // РўРµСЃС‚РёСЂСѓРµРј РїСЂРѕРёР·РІРѕР»СЊРЅСѓСЋ С„РёРіСѓСЂСѓ РЅР° РѕСЃРЅРѕРІРµ Р»СЋР±РѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° РєРѕРѕСЂРґРёРЅР°С‚ >= 1
     public void TestArbitraryFigure()
     {
         var figure = new ArbitraryFigure();
-        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // Забыли передать координаты и вызвали свойство
+        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // Р—Р°Р±С‹Р»Рё РїРµСЂРµРґР°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ Рё РІС‹Р·РІР°Р»Рё СЃРІРѕР№СЃС‚РІРѕ
 
         figure = new ArbitraryFigure(Array.Empty<Point>());
-        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // Передали пустой массив
+        Assert.Throws<IndexOutOfRangeException>(() => { var x = figure.Area; }); // РџРµСЂРµРґР°Р»Рё РїСѓСЃС‚РѕР№ РјР°СЃСЃРёРІ
 
         figure = new ArbitraryFigure(null);
-        Assert.Throws<NullReferenceException>(() => { var x = figure.Area; }); // Передали массив null
+        Assert.Throws<NullReferenceException>(() => { var x = figure.Area; }); // РџРµСЂРµРґР°Р»Рё РјР°СЃСЃРёРІ null
 
 
-        figure.Vertices = new[] { new Point(3, 4) }; // Просто точка
+        figure.Vertices = new[] { new Point(3, 4) }; // РџСЂРѕСЃС‚Рѕ С‚РѕС‡РєР°
         Assert.That(figure.Area, Is.EqualTo(0));
 
-        figure = new ArbitraryFigure(new Point(3, 4), new Point(3, 8)); // Отрезок имеет площадь 0
+        figure = new ArbitraryFigure(new Point(3, 4), new Point(3, 8)); // РћС‚СЂРµР·РѕРє РёРјРµРµС‚ РїР»РѕС‰Р°РґСЊ 0
         Assert.That(figure.Area, Is.EqualTo(0));
 
-        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)); // Прямоугольный треугольник
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)); // РџСЂСЏРјРѕСѓРіРѕР»СЊРЅС‹Р№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє
         Assert.That(figure.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // Несуществующий треугольник - линия
-        Assert.That(figure.Area, Is.EqualTo(0)); // Получаем 0 или можем добавить проверку координат в методе свойства Vertices
-                                                 // с выбросом исключения, когда все точки имеют одинаковый X или одинаковый Y
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(0, 16)); // РќРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє - Р»РёРЅРёСЏ
+        Assert.That(figure.Area, Is.EqualTo(0)); // РџРѕР»СѓС‡Р°РµРј 0 РёР»Рё РјРѕР¶РµРј РґРѕР±Р°РІРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РєРѕРѕСЂРґРёРЅР°С‚ РІ РјРµС‚РѕРґРµ СЃРІРѕР№СЃС‚РІР° Vertices
+                                                 // СЃ РІС‹Р±СЂРѕСЃРѕРј РёСЃРєР»СЋС‡РµРЅРёСЏ, РєРѕРіРґР° РІСЃРµ С‚РѕС‡РєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІС‹Р№ X РёР»Рё РѕРґРёРЅР°РєРѕРІС‹Р№ Y
 
-        figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // Квадрат
+        figure = new ArbitraryFigure(new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2)); // РљРІР°РґСЂР°С‚
         Assert.That(figure.Area, Is.EqualTo(4));
 
         figure = new ArbitraryFigure(new Point(3, 4), new Point(5, 11), new Point(12, 8), new Point(9, 5), new Point(5, 6));
         Assert.That(figure.Area, Is.EqualTo(30));
 
-        figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // Огромный треугольник
+        figure = new ArbitraryFigure(new Point(int.MinValue, int.MaxValue),                // РћРіСЂРѕРјРЅС‹Р№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє
             new Point(int.MinValue, int.MinValue), new Point(int.MaxValue, int.MaxValue));
-        Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // Получаем переполнение в методе свойства или
-                                                                 // можем добавить проверку координат в методе свойства Vertices
+        Assert.Throws<OverflowException>(() => { var x = figure.Area; }); // РџРѕР»СѓС‡Р°РµРј РїРµСЂРµРїРѕР»РЅРµРЅРёРµ РІ РјРµС‚РѕРґРµ СЃРІРѕР№СЃС‚РІР° РёР»Рё
+                                                                 // РјРѕР¶РµРј РґРѕР±Р°РІРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РєРѕРѕСЂРґРёРЅР°С‚ РІ РјРµС‚РѕРґРµ СЃРІРѕР№СЃС‚РІР° Vertices
     }
 
 
-    [Test] // Тестируем произвольную фигуру, заданную массивом любых элементов и функцией для вычисления её площади
+    [Test] // РўРµСЃС‚РёСЂСѓРµРј РїСЂРѕРёР·РІРѕР»СЊРЅСѓСЋ С„РёРіСѓСЂСѓ, Р·Р°РґР°РЅРЅСѓСЋ РјР°СЃСЃРёРІРѕРј Р»СЋР±С‹С… СЌР»РµРјРµРЅС‚РѕРІ Рё С„СѓРЅРєС†РёРµР№ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РµС‘ РїР»РѕС‰Р°РґРё
     public void TestGenericArbitraryFigure()
     {
-        // Задаём круг по длине окружности
+        // Р—Р°РґР°С‘Рј РєСЂСѓРі РїРѕ РґР»РёРЅРµ РѕРєСЂСѓР¶РЅРѕСЃС‚Рё
         var myCircle = new ArbitraryFigure<double>((elements) => elements[0] * elements[0] / (4 * Math.PI),
             2 * Math.PI);
         Assert.That(myCircle.Area, Is.EqualTo(new Circle(1).Area));
 
 
-        // Задаём функцию для вычисления площади треугольника по трём сторонам
+        // Р—Р°РґР°С‘Рј С„СѓРЅРєС†РёСЋ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РїР»РѕС‰Р°РґРё С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° РїРѕ С‚СЂС‘Рј СЃС‚РѕСЂРѕРЅР°Рј
         Func<double[], double> myFunc = new((arrSides) =>
         {
             if (arrSides == null) throw new ArgumentNullException(nameof(arrSides));
 
             if (arrSides.Length != 3)
-                throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
+                throw new ArgumentException("Р”Р»РёРЅР° РјР°СЃСЃРёРІР° РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С„СѓРЅРєС†РёРё.", nameof(arrSides));
 
             double a = arrSides[0];
             double b = arrSides[1];
             double c = arrSides[2];
 
             if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
-                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+                throw new ArgumentException("Р—РЅР°С‡РµРЅРёРµ Р°СЂРіСѓРјРµРЅС‚Р° NaN РёР»Рё <= 0", nameof(a));
 
             double s = (a + b + c) / 2;
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
 
-        var myTriangle = new ArbitraryFigure<double>(null, 3, 4, 5); // Передали null функцию
+        var myTriangle = new ArbitraryFigure<double>(null, 3, 4, 5); // РџРµСЂРµРґР°Р»Рё null С„СѓРЅРєС†РёСЋ
         Assert.Throws<NullReferenceException>(() => { var x = myTriangle.Area; });
 
-        myTriangle = new ArbitraryFigure<double>(myFunc); // Забыли передать массив сторон
+        myTriangle = new ArbitraryFigure<double>(myFunc); // Р—Р°Р±С‹Р»Рё РїРµСЂРµРґР°С‚СЊ РјР°СЃСЃРёРІ СЃС‚РѕСЂРѕРЅ
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
-        myTriangle = new ArbitraryFigure<double>(myFunc, null); // Передали null массив
+        myTriangle = new ArbitraryFigure<double>(myFunc, null); // РџРµСЂРµРґР°Р»Рё null РјР°СЃСЃРёРІ
         Assert.Throws<ArgumentNullException>(() => { var x = myTriangle.Area; });
 
-        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // Ошиблись с количеством сторон
+        myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 5, 6); // РћС€РёР±Р»РёСЃСЊ СЃ РєРѕР»РёС‡РµСЃС‚РІРѕРј СЃС‚РѕСЂРѕРЅ
         Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; });
 
-        myTriangle.Elements = new double[] { 3, 4, 5 }; // Передали правильный массив сторон
+        myTriangle.Elements = new double[] { 3, 4, 5 }; // РџРµСЂРµРґР°Р»Рё РїСЂР°РІРёР»СЊРЅС‹Р№ РјР°СЃСЃРёРІ СЃС‚РѕСЂРѕРЅ
         Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        myTriangle.Elements[0] = 74;                          // Сторона треугольника больше суммы двух остальных сторон
-        Assert.That(myTriangle.Area, Is.EqualTo(double.NaN)); // Получаем double.NaN или можем добавить проверку внутри функции
+        myTriangle.Elements[0] = 74;                          // РЎС‚РѕСЂРѕРЅР° С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° Р±РѕР»СЊС€Рµ СЃСѓРјРјС‹ РґРІСѓС… РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚РѕСЂРѕРЅ
+        Assert.That(myTriangle.Area, Is.EqualTo(double.NaN)); // РџРѕР»СѓС‡Р°РµРј double.NaN РёР»Рё РјРѕР¶РµРј РґРѕР±Р°РІРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РІРЅСѓС‚СЂРё С„СѓРЅРєС†РёРё
 
-        // Добавляем в функцию проверку сторон
+        // Р”РѕР±Р°РІР»СЏРµРј РІ С„СѓРЅРєС†РёСЋ РїСЂРѕРІРµСЂРєСѓ СЃС‚РѕСЂРѕРЅ
         myFunc = new((arrSides) =>
         {
             if (arrSides == null) throw new ArgumentNullException(nameof(arrSides));
 
             if (arrSides.Length != 3)
-                throw new ArgumentException("Длина массива не соответствует функции.", nameof(arrSides));
+                throw new ArgumentException("Р”Р»РёРЅР° РјР°СЃСЃРёРІР° РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С„СѓРЅРєС†РёРё.", nameof(arrSides));
 
             double a = arrSides[0];
             double b = arrSides[1];
             double c = arrSides[2];
 
             if (a <= 0 || b <= 0 || c <= 0 || double.IsNaN(a) || double.IsNaN(b) || double.IsNaN(c))
-                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(a));
+                throw new ArgumentException("Р—РЅР°С‡РµРЅРёРµ Р°СЂРіСѓРјРµРЅС‚Р° NaN РёР»Рё <= 0", nameof(a));
 
             if (a + b - c < double.Epsilon || a + c - b < double.Epsilon || b + c - a < double.Epsilon)
-                throw new ArgumentException("Сумма длин двух сторон должна быть больше длины третьей стороны", nameof(a));
+                throw new ArgumentException("РЎСѓРјРјР° РґР»РёРЅ РґРІСѓС… СЃС‚РѕСЂРѕРЅ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РґР»РёРЅС‹ С‚СЂРµС‚СЊРµР№ СЃС‚РѕСЂРѕРЅС‹", nameof(a));
 
             double s = (a + b + c) / 2;
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         });
         myTriangle.CalcArea = myFunc;
-        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; }); // Теперь получаем исключение
+        Assert.Throws<ArgumentException>(() => { var x = myTriangle.Area; }); // РўРµРїРµСЂСЊ РїРѕР»СѓС‡Р°РµРј РёСЃРєР»СЋС‡РµРЅРёРµ
 
 
-        // Задаём треугольник двумя сторонами и углом между ними
+        // Р—Р°РґР°С‘Рј С‚СЂРµСѓРіРѕР»СЊРЅРёРє РґРІСѓРјСЏ СЃС‚РѕСЂРѕРЅР°РјРё Рё СѓРіР»РѕРј РјРµР¶РґСѓ РЅРёРјРё
         myFunc = new((elements) =>
         {
             if (elements == null) throw new ArgumentNullException(nameof(elements));
 
             if (elements.Length != 3)
-                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+                throw new ArgumentException("Р”Р»РёРЅР° РјР°СЃСЃРёРІР° РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С„СѓРЅРєС†РёРё.", nameof(elements));
 
             double side1 = elements[0];
             double side2 = elements[1];
@@ -202,26 +202,26 @@ public class Tests
 
             if (side1 <= 0 || side2 <= 0 || angleBetween <= 0 ||
             double.IsNaN(side1) || double.IsNaN(side2) || double.IsNaN(angleBetween))
-                throw new ArgumentException("Значение аргумента NaN или <= 0", nameof(elements));
+                throw new ArgumentException("Р—РЅР°С‡РµРЅРёРµ Р°СЂРіСѓРјРµРЅС‚Р° NaN РёР»Рё <= 0", nameof(elements));
 
             return side1 * side2 / 2 * Math.Sin(angleBetween / 180 * Math.PI);
         });
         myTriangle = new ArbitraryFigure<double>(myFunc, 3, 4, 90);
         Assert.That(myTriangle.Area, Is.EqualTo(new Triangle(3, 4, 5).Area));
 
-        // В этом сценарии легко ошибиться с порядком аргументов -
-        // передать сначала угол, а затем стороны, и даже не узнать об этом
-        // Поэтому клиенту лучше не использовать такой класс с функцией,
-        // для которой важен порядок аргументов, и нет возможности определить, правильный ли порядок аргументов
+        // Р’ СЌС‚РѕРј СЃС†РµРЅР°СЂРёРё Р»РµРіРєРѕ РѕС€РёР±РёС‚СЊСЃСЏ СЃ РїРѕСЂСЏРґРєРѕРј Р°СЂРіСѓРјРµРЅС‚РѕРІ -
+        // РїРµСЂРµРґР°С‚СЊ СЃРЅР°С‡Р°Р»Р° СѓРіРѕР», Р° Р·Р°С‚РµРј СЃС‚РѕСЂРѕРЅС‹, Рё РґР°Р¶Рµ РЅРµ СѓР·РЅР°С‚СЊ РѕР± СЌС‚РѕРј
+        // РџРѕСЌС‚РѕРјСѓ РєР»РёРµРЅС‚Сѓ Р»СѓС‡С€Рµ РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С‚Р°РєРѕР№ РєР»Р°СЃСЃ СЃ С„СѓРЅРєС†РёРµР№,
+        // РґР»СЏ РєРѕС‚РѕСЂРѕР№ РІР°Р¶РµРЅ РїРѕСЂСЏРґРѕРє Р°СЂРіСѓРјРµРЅС‚РѕРІ, Рё РЅРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РѕРїСЂРµРґРµР»РёС‚СЊ, РїСЂР°РІРёР»СЊРЅС‹Р№ Р»Рё РїРѕСЂСЏРґРѕРє Р°СЂРіСѓРјРµРЅС‚РѕРІ
         myTriangle = new ArbitraryFigure<double>(myFunc, 90, 3, 4);
-        Assert.That(myTriangle.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // Площади не равны
+        Assert.That(myTriangle.Area, !Is.EqualTo(new Triangle(3, 4, 5).Area)); // РџР»РѕС‰Р°РґРё РЅРµ СЂР°РІРЅС‹
 
 
-        // Задаём квадрат по 2 координатам Point
+        // Р—Р°РґР°С‘Рј РєРІР°РґСЂР°С‚ РїРѕ 2 РєРѕРѕСЂРґРёРЅР°С‚Р°Рј Point
         Func<Point[], double> myPointFunc = new((elements) =>
         {
             if (elements.Length != 2)
-                throw new ArgumentException("Длина массива не соответствует функции.", nameof(elements));
+                throw new ArgumentException("Р”Р»РёРЅР° РјР°СЃСЃРёРІР° РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С„СѓРЅРєС†РёРё.", nameof(elements));
 
             checked
             {
@@ -231,20 +231,20 @@ public class Tests
         var mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(-4, 0), new Point(0, 4));
         Assert.That(mySquare.Area, Is.EqualTo(16));
 
-        // Тестируем переполнение
+        // РўРµСЃС‚РёСЂСѓРµРј РїРµСЂРµРїРѕР»РЅРµРЅРёРµ
         mySquare = new ArbitraryFigure<Point>(myPointFunc, new Point(int.MinValue, 0), new Point(0, 7));
         Assert.Throws<OverflowException>(() => { var x = mySquare.Area; });
     }
 
 
-    [Test] // Тестируем интерфейс
+    [Test] // РўРµСЃС‚РёСЂСѓРµРј РёРЅС‚РµСЂС„РµР№СЃ
     public void TestInterface()
     {
         IFigure figure;
         Random random = new();
         double ExpectedResult;
 
-        // Мы не знаем, какой тип фигуры будет в переменной figure
+        // РњС‹ РЅРµ Р·РЅР°РµРј, РєР°РєРѕР№ С‚РёРї С„РёРіСѓСЂС‹ Р±СѓРґРµС‚ РІ РїРµСЂРµРјРµРЅРЅРѕР№ figure
         if (random.Next(0, 2) == 1)
         {
             figure = new Circle(23);
@@ -256,12 +256,12 @@ public class Tests
             ExpectedResult = 6;
         }
 
-        // Но за счёт приведения фигуры к интерфейсу вычисляем площадь
+        // РќРѕ Р·Р° СЃС‡С‘С‚ РїСЂРёРІРµРґРµРЅРёСЏ С„РёРіСѓСЂС‹ Рє РёРЅС‚РµСЂС„РµР№СЃСѓ РІС‹С‡РёСЃР»СЏРµРј РїР»РѕС‰Р°РґСЊ
         Assert.That(figure.Area, Is.EqualTo(ExpectedResult));
     }
 
 
-    // Тестируем статические методы в классе Calc
+    // РўРµСЃС‚РёСЂСѓРµРј СЃС‚Р°С‚РёС‡РµСЃРєРёРµ РјРµС‚РѕРґС‹ РІ РєР»Р°СЃСЃРµ Calc
 
     [TestCase(0, ExpectedResult = 0)]
     [TestCase(double.Epsilon, ExpectedResult = 0)]
@@ -288,8 +288,8 @@ public class Tests
     [Test]
     public void TestGetAreaTriangleBySidesNotNormalArgument()
     {
-        Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(97, 12, 20)); // Сумма 2 сторон меньше 3 стороны
-        Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(9, 3, 12)); // Сумма 2 сторон равна 3 стороне
+        Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(97, 12, 20)); // РЎСѓРјРјР° 2 СЃС‚РѕСЂРѕРЅ РјРµРЅСЊС€Рµ 3 СЃС‚РѕСЂРѕРЅС‹
+        Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(9, 3, 12)); // РЎСѓРјРјР° 2 СЃС‚РѕСЂРѕРЅ СЂР°РІРЅР° 3 СЃС‚РѕСЂРѕРЅРµ
         Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(0, 12, 3));
         Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(-24, 2, 5));
         Assert.Throws<ArgumentException>(() => GetAreaTriangleBySides(double.NaN, 2, 0.2));
@@ -333,7 +333,7 @@ public class Tests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(GetAreaArbitraryFigure(new Point(3, 4)), Is.EqualTo(0)); // Точка
+            Assert.That(GetAreaArbitraryFigure(new Point(3, 4)), Is.EqualTo(0)); // РўРѕС‡РєР°
 
             Assert.That(GetAreaArbitraryFigure(new Point(0, 0), new Point(0, 4), new Point(3, 0)), Is.EqualTo(6));
 
